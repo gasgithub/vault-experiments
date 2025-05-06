@@ -17,3 +17,8 @@ $ vault write auth/demo-cluster/config \
    kubernetes_host="https://api.cluster.endpoint:port"
 
 ```
+
+# Create Secret engine
+```
+vault secrets enable -path=dev-secrets kv-v2
+```

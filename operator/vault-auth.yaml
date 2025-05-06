@@ -1,0 +1,14 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultAuth
+metadata:
+  name: static-auth
+  namespace: vault-app-vso
+spec:
+  method: kubernetes
+  mount: demo-cluster
+  vaultConnectionRef: openshift-operators/vaultconnection-sample
+  kubernetes:
+    role: app1-role
+    serviceAccount: default
+    audiences:
+      - vault
