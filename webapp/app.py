@@ -27,22 +27,38 @@ def vault_rest():
 
     print("token: ", token)
 
+
+    login_data = {
+        "role": "app1-role",
+        "jwt": token
+    }
+    auth_url = VAULT_ADDR + '/auth/kubernetes/login'
     headers = {
-        "accept": "application/json",
-        "X-Vault-Token": token
+        "accept": "application/json"
     }
 
-    vault_url = VAULT_ADDR + '/v1/dev-secrets/data/app1/config'
+    login_response = requests.post(auth_url, headers = headers, data = login_data)
 
-    token_response = requests.get(vault_url, headers = headers, timeout=600)
+    print("login_response: ", login_response)
+    json_login = json.loads(login_response.text)
+    print("json_login", json_login)
+    client_token = login_response['auth']['client_token']
 
-    print("token_response: ", token_response)
-    json_response = json.loads(token_response.text)
+    print("client_token", client_token)
 
-    print("json_response", json_response)
+    headers = {
+        "accept": "application/json",
+        "X-Vault-Token": client_token
+    }
+    secret_url = VAULT_ADDR + '/v1/dev-secrets/data/app1/config'
 
-    username = json_response['data']['data']['username']
-    password = json_response['data']['data']['password']
+    secret_response = requests.get(secret_url, headers = headers)
+
+    print("secret_response: ", secret_response)
+    json_secret = json.loads(secret_response.text)
+    print("json_secret", json_secret)    
+    username = json_secret['data']['data']['username']
+    password = json_secret['data']['data']['password']
 
     secrets = []
 
