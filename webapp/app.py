@@ -32,7 +32,7 @@ def vault_rest():
         "role": "app1-role",
         "jwt": token
     }
-    auth_url = VAULT_ADDR + '/auth/kubernetes/login'
+    auth_url = VAULT_ADDR + '/v1/auth/demo-cluster/login'
     headers = {
         "accept": "application/json"
     }
@@ -40,6 +40,7 @@ def vault_rest():
     login_response = requests.post(auth_url, headers = headers, data = login_data)
 
     print("login_response: ", login_response)
+    print("text: ", login_response.text)
     json_login = json.loads(login_response.text)
     print("json_login", json_login)
     client_token = login_response['auth']['client_token']
