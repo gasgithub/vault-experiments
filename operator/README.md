@@ -1,5 +1,7 @@
 # Vault Secrets Operator example
 
+It is assumed that Vault is already installed (if not follow [Vault installation](../vault-install.md))  and Kubernetes authentication is configured ([Configure authentication](../auth-kubernetes.md))
+
 ## Install Operator
 Access the OperatorHub and search for `Vault Secret Operator`.  Install operator using default settings.
 
@@ -152,7 +154,7 @@ Configure deployment to use the secret:
 ```
 Test if you are seeing secrets correctly in the app.
 
-## Rotation
+# Rotation
 If you will edit secret via vault UI, you will see new values in vault secret and in the generated k8s secret.
 However, secrets are not update in the application.
 
@@ -168,3 +170,6 @@ Add the following section to the vault secret definition:
 ```
 
 Retest changing secret in the vault and observe Deployment pods being restarted.
+
+## Dynamic secrets
+Manually rotating secrets is can be cumbersome and prone to human error. You can use dynamic secrets that are automatically rotated. For more see [Dynamic secrets](https://developer.hashicorp.com/vault/tutorials/kubernetes/vault-secrets-operator#dynamic-secrets)
