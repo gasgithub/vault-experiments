@@ -39,6 +39,8 @@ def vault_rest():
     print("token_response: ", token_response)
     json_response = json.loads(token_response.text)
 
+    print("json_response", json_response)
+
     username = json_response['data']['data']['username']
     password = json_response['data']['data']['password']
 
