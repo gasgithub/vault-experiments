@@ -32,28 +32,23 @@ Dev requires no further setup, no state management, and no initialization. This 
 $ helm install vault hashicorp/vault \
     --set "global.openshift=true" \
     --set "server.dev.enabled=true" \
+    --set "server.route.enabled=true" \
+    --set "server.route.tls.termination=edge" \ 
+    --set "server.route.host="" \   
     --set "server.image.repository=docker.io/hashicorp/vault" \
-    --set "injector.image.repository=docker.io/hashicorp/vault-k8s" \
-    --set "route.enabled=true" \
-    --set "route.tls.termination: edge"
+    --set "injector.image.repository=docker.io/hashicorp/vault-k8s" 
+
 ```
 
-Openshift:
+Openshift via values file:
+```
 $ helm install -f values.openshift.yaml vault hashicorp/vault 
+```
 
-
-helm install vault hashicorp/vault \
-    --set "global.openshift=true" \
-    --set "server.dev.enabled=true" \
-    --set "route.enabled=true" \
-    --set "route.tls.termination: edge"
-
-
-
-The Vault pod and Vault Agent Injector pod are deployed in the default namespace.
+The Vault pod and Vault Agent Injector pod are deployed in the current namespace.
 
 # Configure web access
-By default server in dev mode doesnt provide `route` to access via browser
+If `route` is not enabled, by default server in dev mode doesnt provide `route` to access via browser
 
 Apply the following yaml to create `route`:
 
@@ -77,3 +72,6 @@ spec:
 ```
 Then access your Vault via:
 `https://vault-vault.apps.....`
+
+
+In the login screen enter `root` in the Token field and click Sign In
