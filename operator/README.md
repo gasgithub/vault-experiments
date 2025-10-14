@@ -115,6 +115,9 @@ spec:
 
   # static secret refresh interval
   refreshAfter: 30s
+
+  # Name of the CRD to authenticate to Vault
+  vaultAuthRef: static-auth  
   ```
 
   After applying this, you will notice that matching k8s secret was created in the same namespace:

@@ -38,6 +38,16 @@ $ helm install vault hashicorp/vault \
     --set "route.tls.termination: edge"
 ```
 
+Openshift:
+$ helm install -f values.openshift.yaml vault hashicorp/vault 
+
+
+helm install vault hashicorp/vault \
+    --set "global.openshift=true" \
+    --set "server.dev.enabled=true" \
+    --set "route.enabled=true" \
+    --set "route.tls.termination: edge"
+
 
 
 The Vault pod and Vault Agent Injector pod are deployed in the default namespace.

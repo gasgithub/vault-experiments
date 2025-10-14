@@ -43,7 +43,7 @@ def vault_rest():
     print("text: ", login_response.text)
     json_login = json.loads(login_response.text)
     print("json_login", json_login)
-    client_token = login_response['auth']['client_token']
+    client_token = json_login['auth']['client_token']
 
     print("client_token", client_token)
 
