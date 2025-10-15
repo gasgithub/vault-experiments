@@ -20,7 +20,7 @@ def hello_world():
 @app.route('/rest')
 def vault_rest():
 
-    VAULT_ADDR = os.environ.get('VAULT_ADDR', 'http://vault:8200')
+    VAULT_ADDR = os.environ.get('VAULT_ADDR', 'http://vault.vault.svc.cluster.local:8200')
     JWT_PATH = os.environ.get('JWT_PATH', '/var/run/secrets/kubernetes.io/serviceaccount/token')
     with open(JWT_PATH, 'r') as file:
         token = file.read()
@@ -29,7 +29,7 @@ def vault_rest():
 
 
     login_data = {
-        "role": "app1-role",
+        "role": "app2-role",
         "jwt": token
     }
     auth_url = VAULT_ADDR + '/v1/auth/demo-cluster/login'

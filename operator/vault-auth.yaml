@@ -2,7 +2,6 @@ apiVersion: secrets.hashicorp.com/v1beta1
 kind: VaultAuth
 metadata:
   name: static-auth
-  namespace: vault-app-vso
 spec:
   method: kubernetes
   mount: demo-cluster

@@ -7,11 +7,11 @@ These steps can be done either via web console or command line. Below command li
 ```
 $ oc exec -it vault-0 -- bin/sh
 ```
-2. Enabel Kubernetes auth method
+2. Enable Kubernetes auth method
 ```
 $ valult auth enable -path demo-cluster kubernetes
 ```
-3. Configure auth method (use same URL as for `oc login`)
+3. Configure auth method (use same URL as for `oc login` , eg https://api.crc.testing:6443)
 ```
 $ vault write auth/demo-cluster/config \
    kubernetes_host="https://api.cluster.endpoint:port"

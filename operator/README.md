@@ -38,7 +38,6 @@ apiVersion: secrets.hashicorp.com/v1beta1
 kind: VaultAuth
 metadata:
   name: static-auth
-  namespace: vault-app-vso
 spec:
   method: kubernetes
   mount: demo-cluster
@@ -74,12 +73,21 @@ path "dev-secrets/data/app1/config" {
 }
 ```
 
+From command line:
+```
+$ vault policy write app1 -
+path "dev-secrets/data/app1/config" {
+   capabilities = ["read", "list"]
+}
+```
+Ctrl+D at the end.
+
 ### Create a role in Vault to enable access to secrets within the `dev-secrets` engine using `app1` policy:
 
 ```
 vault write auth/demo-cluster/role/app1-role \
    bound_service_account_names=* \
-   bound_service_account_namespaces=vault-app-vso \
+   bound_service_account_namespaces=* \
    policies=app1 \
    audience=vault \
    ttl=24h
@@ -90,6 +98,14 @@ where:
 - `bound_service_account_namespaces` - limits namespaces that can use the role
 - `policies` - defines policy that will be attached to the role
 
+vault write auth/demo-cluster/role/app2-role \
+   bound_service_account_names=* \
+   bound_service_account_namespaces=* \
+   policies=app1 \
+   audience=https://kubernetes.default.svc \
+   ttl=24h
+
+https://kubernetes.default.svc
 
 ### Create static secret
 Create the following secret:
@@ -98,7 +114,6 @@ apiVersion: secrets.hashicorp.com/v1beta1
 kind: VaultStaticSecret
 metadata:
   name: vault-secret
-  namespace: vault-app-vso  
 spec:
   type: kv-v2
 
