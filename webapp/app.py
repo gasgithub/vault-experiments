@@ -32,7 +32,10 @@ def vault_rest():
         "role": "app2-role",
         "jwt": token
     }
+    print("login_Data: ", login_data)
     auth_url = VAULT_ADDR + '/v1/auth/demo-cluster/login'
+    print("auth_url: ", auth_url)
+    
     headers = {
         "accept": "application/json"
     }
