@@ -1,0 +1,86 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  annotations:
+    alpha.image.policy.openshift.io/resolve-names: '*'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"vault-app:latest","namespace":"app-vault"},"fieldPath":"spec.template.spec.containers[?(@.name==\"vault-app-demo\")].image","paused":false}]'
+  name: vault-app-demo
+  labels:
+    app: vault-app-demo
+    app.kubernetes.io/component: vault-app-demo
+    app.kubernetes.io/instance: vault-app-demo
+    app.kubernetes.io/name: vault-app-demo
+    app.kubernetes.io/part-of: vault-app-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vault-app-demo
+  template:
+    metadata:
+      labels:
+        app: vault-app-demo
+        deployment: vault-app-demo
+    spec:
+      containers:
+        - name: vault-app-demo
+          env:
+            - name: PYTHONUNBUFFERED
+              value: '1'
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          envFrom:
+            - secretRef:
+                name: app-secret-demo
+          image: 'vault-app'
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: vault-app-demo
+  labels:
+    app: vault-app-demo
+    app.kubernetes.io/component: vault-app-demo
+    app.kubernetes.io/instance: vault-app-demo
+    app.kubernetes.io/name: vault-app-demo
+    app.kubernetes.io/part-of: vault-app-demo
+spec:
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
+  selector:
+    app: vault-app-demo
+    deployment: vault-app-demo
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: vault-app-demo
+  labels:
+    app: vault-app-demo
+    app.kubernetes.io/component: vault-app-demo
+    app.kubernetes.io/instance: vault-app-demo
+    app.kubernetes.io/name: vault-app-demo
+    app.kubernetes.io/part-of: vault-app-demo
+spec:
+  to:
+    kind: Service
+    name: vault-app-demo
+    weight: 100
+  port:
+    targetPort: 8080-tcp
+  tls:
+    termination: edge
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: app-secret-demo
+stringData:
+  password: opensesame
+  username: admin
+type: Opaque

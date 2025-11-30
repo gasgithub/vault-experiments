@@ -1,0 +1,20 @@
+# These overrides are appropriate defaults for deploying this chart on OpenShift
+global:
+  openshift: true
+
+injector:
+  enabled: "false"
+
+server:
+  dev: 
+    enabled: true
+  serviceAccount:
+    create: false
+  route:
+    enabled: true
+    tls:
+      termination: "edge"    
+    # empty host to use default route
+    host: ""
+
+
